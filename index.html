@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maya AI – Your AI assistant, made in Nepal</title>
+<meta name="description" content="Maya AI is a voice-first AI companion. Talk or type, open apps, make calls, and get answers.">
+<style>
+:root{
+  --bg:#f3f1ff; --card:#ffffff; --fg:#1b1740; --sub:#5b5a85; --accent:#7a3cff; --accent2:#1fa8e8; --line:#d9d4f5; --btnfg:#ffffff;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b0624; --card:#171046; --fg:#f2eeff; --sub:#b9b3e6; --accent:#9b6bff; --accent2:#3dbcff; --line:#33297a; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Noto Sans Devanagari",sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header.top{padding:18px 0;border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand{font-weight:800;letter-spacing:.12em}
+nav a{margin-left:16px;text-decoration:none;color:var(--sub);font-size:14px}
+nav a:hover{color:var(--accent)}
+.hero{padding:44px 0 36px;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+@media (max-width:700px){.hero{grid-template-columns:1fr;text-align:center}.hero p{margin-left:auto;margin-right:auto}.visual{order:-1}}
+.visual{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:0 auto}
+.visual .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:0;animation:ring 3.6s ease-out infinite}
+.visual .ring:nth-child(2){animation-delay:1.2s}
+.visual .ring:nth-child(3){animation-delay:2.4s}
+@keyframes ring{0%{transform:scale(.72);opacity:.55}100%{transform:scale(1.18);opacity:0}}
+.orb{position:absolute;inset:14%;border-radius:50%;background:conic-gradient(from 0deg,#7a3cff,#1fa8e8,#ff4fa3,#7a3cff);animation:spin 9s linear infinite;box-shadow:0 0 60px rgba(122,60,255,.55)}
+.orb::after{content:"";position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a1a6e,#0b0624 70%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.visual img{position:absolute;inset:14%;width:72%;height:72%;object-fit:cover;border-radius:50%;border:3px solid var(--accent);animation:float 5s ease-in-out infinite;background:#0b0624}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.shots{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x mandatory}
+.shots img{height:420px;width:auto;border-radius:20px;border:1px solid var(--line);scroll-snap-align:start;flex:none}
+@media (prefers-reduced-motion: reduce){.visual .ring,.orb,.visual img{animation:none}.visual .ring{opacity:.25}}
+.hero h1{font-size:clamp(34px,7vw,56px);line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
+.hero p{font-size:18px;color:var(--sub);max-width:34em;margin:0 0 26px}
+.btn{display:inline-block;padding:14px 26px;border-radius:14px;background:var(--accent);color:var(--btnfg);font-weight:700;text-decoration:none}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+.note{font-size:13px;color:var(--sub);margin-top:10px}
+section{padding:28px 0}
+h2{font-size:26px;margin:0 0 12px}
+h3{font-size:17px;margin:22px 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+ul{padding-left:20px;margin:6px 0}
+li{margin:4px 0}
+ol.steps{padding-left:22px}
+ol.steps li{margin:10px 0}
+.legal{display:none;padding-top:24px}
+body[data-view="legal"] .home-only{display:none}
+body[data-view="legal"] .legal.on{display:block;animation:pagein .5s ease both}
+@keyframes pagein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+nav a{padding:6px 2px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+nav a:hover{border-color:var(--accent)}
+@media (max-width:520px){nav a{margin-left:10px;font-size:13px}}
+.legal .card h3:first-child{margin-top:0}
+.legal .card p,.legal .card li{max-width:62ch}
+.linkrow a{margin-right:14px}
+.back{display:inline-block;margin-bottom:14px;font-size:14px}
+footer{padding:34px 0 48px;border-top:1px solid var(--line);color:var(--sub);font-size:14px}
+footer a{margin-right:14px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+/* ===== animations ===== */
+.stars{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+ radial-gradient(2px 2px at 12% 20%,var(--accent2),transparent),
+ radial-gradient(2px 2px at 78% 12%,var(--accent),transparent),
+ radial-gradient(1.5px 1.5px at 40% 70%,var(--accent2),transparent),
+ radial-gradient(2px 2px at 88% 62%,var(--accent),transparent),
+ radial-gradient(1.5px 1.5px at 22% 88%,var(--accent),transparent),
+ radial-gradient(1.5px 1.5px at 62% 36%,var(--accent2),transparent);
+ animation:twinkle 4s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.25}to{opacity:.8}}
+.glow{position:fixed;width:46vmax;height:46vmax;border-radius:50%;z-index:-2;pointer-events:none;filter:blur(90px);opacity:.28;background:var(--accent);top:-18vmax;left:-12vmax;animation:drift 16s ease-in-out infinite alternate}
+.glow.b{background:var(--accent2);top:auto;left:auto;bottom:-20vmax;right:-14vmax;animation-duration:20s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.brand{background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.w{display:inline-block;opacity:0;transform:translateY(.6em) rotate(3deg);animation:wordin .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.12s + .15s)}
+@keyframes wordin{to{opacity:1;transform:none}}
+.grad{background:linear-gradient(90deg,#7a3cff,#1fa8e8,#ff4fa3,#7a3cff);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+.typed{min-height:1.7em;font-weight:600;color:var(--accent2);margin:0 0 14px}
+.typed::after{content:"";display:inline-block;width:2px;height:1.1em;background:var(--accent2);margin-left:3px;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.btn{position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(122,60,255,.4)}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 34px rgba(122,60,255,.55)}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:sweep 3.2s ease-in-out infinite}
+@keyframes sweep{0%,60%{left:-60%}100%{left:130%}}
+.js .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.feat:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 14px 30px rgba(122,60,255,.25)}
+.feat .ic{font-size:30px;display:inline-block;animation:bob 3s ease-in-out infinite}
+.feat:nth-child(2n) .ic{animation-delay:.5s}.feat:nth-child(3n) .ic{animation-delay:1s}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-6deg)}}
+.feat b{display:block;margin:8px 0 2px}
+.feat span{color:var(--sub);font-size:14px}
+.shots img{transition:transform .3s}
+.shots img:hover{transform:translateY(-6px) scale(1.02)}
+@media (prefers-reduced-motion: reduce){
+ body[data-view="legal"] .legal.on{animation:none}
+ .stars,.glow,.brand,.grad,.btn::after,.feat .ic,.typed::after{animation:none}
+ .w{animation:none;opacity:1;transform:none}
+ .js .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="glow"></div><div class="glow b"></div>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <span class="brand">MAYA AI</span>
+    <nav>
+      <a href="#download">Download</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="#delete">Delete account</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= HOME ================= -->
+<div class="home-only">
+  <div class="hero">
+    <div>
+      <h1><span class="w" style="--i:0">Talk</span> <span class="w" style="--i:1">to</span> <span class="w grad" style="--i:2">Maya.</span><br><span class="w" style="--i:3">She</span> <span class="w" style="--i:4">gets</span> <span class="w" style="--i:5">things</span> <span class="w" style="--i:6">done.</span></h1>
+      <p class="typed" id="typed" aria-live="polite"></p>
+      <p>Maya AI is a voice-first AI companion made in Nepal. Ask questions, open apps, call and message contacts, analyze photos and PDFs, and chat in your own language.</p>
+      <a class="btn" href="#download">Download for Android</a>
+      <div class="note">Free to start. 20 minutes of voice every day.</div>
+    </div>
+    <div class="visual" aria-hidden="true">
+      <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+      <div class="orb"></div>
+      <!-- Put your Maya photo (maya_hero) next to index.html and name it maya.jpg -->
+      <img src="maya.jpg" alt="Maya AI" onerror="this.remove()">
+    </div>
+  </div>
+
+  <section class="reveal">
+    <h2>See Maya in action</h2>
+    <!-- Add phone screenshots next to index.html as shot1.png, shot2.png, shot3.png, shot4.png -->
+    <div class="shots">
+      <img src="shot1.png" alt="Maya AI home screen" onerror="this.remove()">
+      <img src="shot2.png" alt="Maya AI voice call" onerror="this.remove()">
+      <img src="shot3.png" alt="Maya AI chat" onerror="this.remove()">
+      <img src="shot4.png" alt="Maya AI personalities" onerror="this.remove()">
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>What Maya can do</h2>
+    <div class="feats">
+      <div class="feat reveal" style="--d:.0s"><span class="ic">🎙️</span><b>Voice calls</b><span>Talk hands-free in any language, including नेपाली.</span></div>
+      <div class="feat reveal" style="--d:.08s"><span class="ic">📱</span><b>Phone control</b><span>Open apps, set alarms, play YouTube, navigate.</span></div>
+      <div class="feat reveal" style="--d:.16s"><span class="ic">📞</span><b>Calls and messages</b><span>Call or message your contacts by name.</span></div>
+      <div class="feat reveal" style="--d:.24s"><span class="ic">🖼️</span><b>Photos and PDFs</b><span>Ask Maya about any image or document.</span></div>
+      <div class="feat reveal" style="--d:.32s"><span class="ic">🎭</span><b>Personalities</b><span>Friendly, Funny, Teacher, Developer and more.</span></div>
+      <div class="feat reveal" style="--d:.40s"><span class="ic">📷</span><b>Live Camera</b><span>Show Maya what you see during a voice call.</span></div>
+    </div>
+  </section>
+
+  <section id="download" class="reveal">
+    <h2>Download</h2>
+    <div class="card">
+      <p><strong>Full version (APK)</strong> includes every feature: direct SMS sending, full phone control through Accessibility, and the RGB light over other apps.</p>
+      <!-- TODO: replace with your real GitHub Releases link -->
+      <p><a class="btn" href="https://github.com/YOUR-USERNAME/maya-ai/releases/latest" rel="noopener">Download APK</a></p>
+      <p class="note">Version 1.0.0 · Android 8.0 or newer</p>
+
+      <h3>How to install</h3>
+      <ol class="steps">
+        <li>Open the download link on your Android phone and download the APK.</li>
+        <li>Tap the file. If Android asks, allow your browser to install apps from this source.</li>
+        <li>If Google Play Protect shows a warning, tap <strong>More details</strong>, then <strong>Install anyway</strong>.</li>
+        <li>Open Maya AI, sign in, and add your Gemini key in Settings &gt; Connections.</li>
+        <li>For full phone control, turn on <strong>Maya AI Control</strong> in Accessibility settings. This is optional.</li>
+      </ol>
+      <p class="note">Updates are not automatic. Check this page for new versions.</p>
+      <p class="note linkrow"><a href="#privacy-apk">Full APK privacy details</a></p>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>Contact</h2>
+    <div class="card">
+      <p>Questions or problems? Email <a href="mailto:khadkasuresh933@gmail.com">khadkasuresh933@gmail.com</a>.</p>
+      <p>Developer: Suresh Khadka, Nepal.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= PRIVACY (Play version) ================= -->
+<section class="legal" id="privacy">
+  <a class="back" href="#top">Back to home</a>
+  <h2>Maya AI Privacy Policy</h2>
+  <div class="card">
+    <p>Effective date: November 21, 2026</p>
+
+    <h3>Information we collect</h3>
+    <ul>
+      <li>Name and email address, when you sign in</li>
+      <li>Chat messages and voice conversations</li>
+      <li>Memory notes you choose to save</li>
+      <li>Profile photo, stored only on your phone</li>
+      <li>Images and PDF files you choose to upload</li>
+      <li>Contacts, used only to find a person by name when you ask to call or message. They are not stored or sent to our servers.</li>
+      <li>Screen and camera images, only while you turn on Screen Share or Live Camera</li>
+      <li>Pro subscription status</li>
+      <li>Device information needed for the app to work</li>
+    </ul>
+
+    <h3>How we use your information</h3>
+    <ul>
+      <li>To provide AI chat and voice replies</li>
+      <li>To save chat history on your device</li>
+      <li>To enable voice, camera, image, PDF and phone-control features</li>
+      <li>To improve app performance and security</li>
+    </ul>
+
+    <h3>Permissions</h3>
+    <p>Internet, Microphone, Camera, Contacts, Phone and Notifications. Each is used only for the feature it belongs to.</p>
+
+    <h3>Third-party services</h3>
+    <ul>
+      <li>Firebase (sign-in, Pro status, and our chat server)</li>
+      <li>Google Gemini, Groq and OpenAI (to generate AI replies)</li>
+    </ul>
+    <p>Messages, images, PDFs and voice you send for a reply are processed by these services under their own privacy policies.</p>
+
+    <h3>Data security</h3>
+    <p>We use reasonable security measures. No internet service can guarantee 100% security.</p>
+
+    <h3>Delete your account</h3>
+    <p>Use <em>Delete my account</em> inside the app, or see <a href="#delete">how to request deletion</a>. Data is deleted within 30 days.</p>
+
+    <h3>Children's privacy</h3>
+    <p>Maya AI is not intended for children under 13.</p>
+
+    <h3>Changes to this policy</h3>
+    <p>We may update this policy. The latest version is always on this page.</p>
+
+    <h3>Contact us</h3>
+    <p>Email: <a href="mailto:khadkasuresh933@gmail.com">khadkasuresh933@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- ================= PRIVACY (APK extras) ================= -->
+<section class="legal" id="privacy-apk">
+  <a class="back" href="#top">Back to home</a>
+  <h2>Additional privacy details: Full APK</h2>
+  <div class="card">
+    <p>The Full APK includes everything in the <a href="#privacy">main privacy policy</a>, plus these optional features:</p>
+    <ul>
+      <li><strong>SMS:</strong> sends a message directly when you ask Maya to. Message content is not stored by us.</li>
+      <li><strong>Display over other apps:</strong> shows the RGB light and keeps the screen awake during a call.</li>
+      <li><strong>Accessibility:</strong> used only if you turn on "Maya AI Control". It lets Maya click, scroll and type when you ask. Screen content is not stored.</li>
+      <li><strong>Payments:</strong> eSewa, Khalti and other providers handle payment. Card and bank details are never saved in the app.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= TERMS ================= -->
+<section class="legal" id="terms">
+  <a class="back" href="#top">Back to home</a>
+  <h2>Maya AI Terms of Service</h2>
+  <div class="card">
+    <p>Effective date: November 21, 2026</p>
+    <h3>1. Use of the app</h3>
+    <p>Maya AI is an AI assistant. You must be at least 13 years old to use it.</p>
+    <h3>2. AI responses</h3>
+    <p>Answers are generated by AI and may be wrong. Do not rely on them for medical, legal or financial decisions.</p>
+    <h3>3. Your responsibility</h3>
+    <p>Do not use Maya AI for illegal, harmful, abusive or deceptive purposes. You are responsible for any API keys you add.</p>
+    <h3>4. Phone control</h3>
+    <p>Phone actions such as calls and opening apps run only when you ask for them.</p>
+    <h3>5. Pro subscription</h3>
+    <p>Pro features, price and billing are shown before purchase.</p>
+    <h3>6. Account</h3>
+    <p>You can delete your account at any time. See <a href="#delete">Delete account</a>.</p>
+    <h3>7. Limitation</h3>
+    <p>The app is provided "as is", without warranty. We are not liable for losses from using it.</p>
+    <h3>8. Changes</h3>
+    <p>We may update these terms. Continuing to use the app means you accept them.</p>
+    <h3>Contact</h3>
+    <p><a href="mailto:khadkasuresh933@gmail.com">khadkasuresh933@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- ================= DELETE ACCOUNT ================= -->
+<section class="legal" id="delete">
+  <a class="back" href="#top">Back to home</a>
+  <h2>Delete your Maya AI account</h2>
+  <div class="card">
+    <h3>In the app</h3>
+    <ol class="steps">
+      <li>Sign out, then sign in again (Android requires a recent sign-in to delete).</li>
+      <li>Open Settings &gt; Privacy &amp; about &gt; Privacy &amp; data.</li>
+      <li>Tap <strong>Delete my account</strong> and confirm.</li>
+    </ol>
+    <h3>By email</h3>
+    <p>Send an email from the address you signed up with to <a href="mailto:khadkasuresh933@gmail.com?subject=Delete%20my%20Maya%20AI%20account">khadkasuresh933@gmail.com</a> with the subject "Delete my Maya AI account".</p>
+    <h3>What is deleted</h3>
+    <p>Your sign-in account and Pro status are deleted within 30 days. Chats, memory and your profile photo are stored only on your phone and are removed when you clear app data or uninstall the app.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="#privacy">Privacy Policy</a><a href="#terms">Terms</a><a href="#delete">Delete account</a>
+    <p>© 2026 Maya AI · Made in Nepal</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add("js");
+(function(){
+  var els=document.querySelectorAll(".reveal");
+  if(!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+    els.forEach(function(e){io.observe(e)});
+  }
+  var el=document.getElementById("typed");
+  var lines=["Ask anything, out loud.","Open apps with your voice.","Call mom without touching your phone.","Chat in your own language.","Show her a photo, she will explain it."];
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce){el.textContent=lines[0];return;}
+  var li=0,ci=0,del=false;
+  function tick(){
+    var t=lines[li];
+    el.textContent=t.slice(0,ci);
+    if(!del&&ci<t.length){ci++;setTimeout(tick,55);}
+    else if(!del){del=true;setTimeout(tick,1500);}
+    else if(ci>0){ci--;setTimeout(tick,28);}
+    else{del=false;li=(li+1)%lines.length;setTimeout(tick,300);}
+  }
+  setTimeout(tick,900);
+})();
+</script>
+<script>
+(function(){
+  var legal=["privacy","privacy-apk","terms","delete"];
+  function route(){
+    var id=decodeURIComponent(location.hash.slice(1));
+    document.querySelectorAll(".legal").forEach(function(e){e.classList.remove("on")});
+    if(legal.indexOf(id)>-1){
+      document.body.setAttribute("data-view","legal");
+      document.getElementById(id).classList.add("on");
+      document.title=document.querySelector("#"+id+" h2").textContent+" – Maya AI";
+      window.scrollTo(0,0);
+    }else{
+      document.body.setAttribute("data-view","home");
+      document.title="Maya AI – Your AI assistant, made in Nepal";
+      var t=id&&document.getElementById(id);
+      if(t){setTimeout(function(){t.scrollIntoView({behavior:"smooth",block:"start"})},40);}
+      else if(!id){window.scrollTo(0,0);}
+    }
+  }
+  window.addEventListener("hashchange",route);
+  route();
+})();
+</script>
+</body>
+</html>
